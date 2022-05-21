@@ -3,13 +3,20 @@ import serial
 import logging
 from datetime import datetime
 servos = serial.Serial('/dev/ttyUSB0',115200)
-log_filename = f"robosetter_{datetime.now()}.txt".replace(' ','_')
+log_filename = f"log/robosetter_{datetime.now()}.txt".replace(' ','_')
 logging.basicConfig(filename=log_filename, level=logging.INFO)
 # log csv header
-servo_nums = range(1,5)
+servo_nums = range(1,6)
 telemetry_queries = {'status':'Q', 'position':'QD', 'current':'QC', 'voltage':'QV'}
 logging.info(
-    'timestamp'+','.join([f' servo{servo_num}{k}' for servo_num in servo_nums for k, v in telemetry_queries.items()])
+    'timestamp'+','.join(
+        [
+            f' servo{servo_num}{k}'
+            for servo_num in servo_nums
+            for k, v
+            in telemetry_queries.items()
+        ]
+    ).strip()
 )
 
 class MyController(Controller):
